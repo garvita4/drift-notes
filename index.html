@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drift Notes</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="title">DRIFT NOTES</div>
+    <div class="subtitle">Write it. Release it. Watch it float away.</div>
+    <button id="clearBtn" class="mc-btn">Clear</button>
+
+    <div id="stars"></div>
+    <div class="sun"></div>
+    <div class="moon"></div>
+    <div id="clouds"></div>
+
+    <div id="sky"></div>
+    <div class="ground"></div>
+
+    <div class="bottom-bar">
+        <div class="swatches" id="swatches" role="group" aria-label="Note colour"></div>
+        <div class="input-wrapper">
+            <input type="text" id="noteInput" placeholder="Write something..." maxlength="100" autocomplete="off" />
+            <button id="releaseBtn">Release</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
