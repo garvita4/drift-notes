@@ -5,15 +5,32 @@
 }
 
 :root {
-    --sky-top: #5b9df0;
-    --sky-bottom: #a9d4ff;
+    --ink: #1c1c1c;
+}
+
+body[data-theme="overworld"] {
     --grass: #5fa83a;
     --grass-dark: #468a28;
     --dirt: #8a5a35;
     --dirt-dark: #6d4527;
-    --stone: #8b8b8b;
-    --stone-dark: #5a5a5a;
-    --ink: #1c1c1c;
+}
+
+body[data-theme="nether"] {
+    --grass: #9b2a2a;
+    --grass-dark: #6e1616;
+    --dirt: #6b2a2a;
+    --dirt-dark: #4f1c1c;
+}
+
+body[data-theme="end"] {
+    --grass: #ecec b0;
+    --grass-dark: #c9c987;
+    --dirt: #dcdc9c;
+    --dirt-dark: #c4c47e;
+}
+
+body[data-theme="end"] {
+    --grass: #ecebb0;
 }
 
 html,
@@ -23,9 +40,9 @@ body {
 
 body {
     overflow: hidden;
-    font-family: 'VT323', monospace;
-    background: linear-gradient(to bottom, var(--sky-top), var(--sky-bottom) 70%);
     position: relative;
+    font-family: 'VT323', monospace;
+    background: #5b9df0;
     image-rendering: pixelated;
 }
 
@@ -61,6 +78,13 @@ body {
     background: #fff;
 }
 
+#clouds {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
 #clouds,
 .ground {
     transition: filter 1s linear;
@@ -70,7 +94,6 @@ body {
     position: absolute;
     height: 36px;
     background: #fff;
-    opacity: .95;
     animation: cloudmove linear infinite;
 }
 
@@ -95,14 +118,6 @@ body {
     left: 62%;
 }
 
-#clouds {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-
 @keyframes cloudmove {
     from {
         transform: translateX(-250px);
@@ -110,6 +125,46 @@ body {
 
     to {
         transform: translateX(calc(100vw + 250px));
+    }
+}
+
+body[data-theme="nether"] #clouds,
+body[data-theme="end"] #clouds {
+    display: none;
+}
+
+#embers {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    display: none;
+}
+
+body[data-theme="nether"] #embers {
+    display: block;
+}
+
+.ember {
+    position: absolute;
+    bottom: -10px;
+    background: #ff9a3c;
+    animation: rise linear infinite;
+}
+
+@keyframes rise {
+    0% {
+        transform: translateY(0);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-110vh) translateX(40px);
+        opacity: 0;
     }
 }
 
@@ -140,6 +195,7 @@ body {
     inset: 0;
     overflow: hidden;
     z-index: 5;
+    pointer-events: none;
 }
 
 .note {
@@ -148,7 +204,7 @@ body {
     padding: 10px 14px 12px;
     font-size: 24px;
     line-height: 1.1;
-    color: #1c1c1c;
+    color: var(--ink);
     background: var(--c);
     border: 4px solid var(--ink);
     box-shadow:
@@ -156,9 +212,14 @@ body {
         inset -4px -4px 0 rgba(0, 0, 0, .18),
         5px 5px 0 rgba(0, 0, 0, .3);
     word-wrap: break-word;
-    pointer-events: none;
+    pointer-events: auto;
+    cursor: pointer;
     opacity: 0;
-    will-change: left, top, transform;
+    will-change: transform;
+}
+
+.note:hover {
+    z-index: 50;
 }
 
 .note.visible {
@@ -169,6 +230,171 @@ body {
 .note.fading {
     opacity: 0;
     transition: opacity 2.2s steps(8);
+    pointer-events: none;
+}
+
+.note.fading.bursting {
+    transition-duration: .25s;
+}
+
+.note .txt {
+    display: block;
+}
+
+.note .meta {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 8px;
+    padding: 2px 8px;
+    font-size: 18px;
+    white-space: nowrap;
+    color: #fff;
+    background: rgba(0, 0, 0, .78);
+    border-radius: 3px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .15s ease;
+}
+
+.note:hover .meta {
+    opacity: 1;
+}
+
+.note.pinned::after {
+    content: "📌";
+    position: absolute;
+    top: -16px;
+    right: -10px;
+    font-size: 22px;
+}
+
+.type-book {
+    border-left-width: 14px;
+    border-radius: 2px 6px 6px 2px;
+    box-shadow:
+        inset 0 -6px 0 rgba(255, 255, 255, .55),
+        inset -4px 0 0 rgba(255, 255, 255, .35),
+        5px 5px 0 rgba(0, 0, 0, .3);
+}
+
+.type-torch {
+    background: #2a1f16;
+    color: var(--c);
+    border-color: #6b4a2a;
+    text-shadow: 0 0 8px var(--c), 0 0 2px var(--c);
+    box-shadow:
+        inset 3px 3px 0 rgba(255, 255, 255, .08),
+        0 0 22px -2px var(--c),
+        5px 5px 0 rgba(0, 0, 0, .3);
+    animation: flicker 1.4s steps(2) infinite;
+}
+
+@keyframes flicker {
+    0% {
+        filter: brightness(1);
+    }
+
+    50% {
+        filter: brightness(1.25);
+    }
+
+    100% {
+        filter: brightness(.95);
+    }
+}
+
+.type-bottle {
+    background: var(--c);
+    background: color-mix(in srgb, var(--c) 65%, white);
+    border-radius: 22px 22px 16px 16px;
+}
+
+.type-bottle::before {
+    content: "";
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    width: 22px;
+    height: 14px;
+    margin-left: -11px;
+    background: #b07a42;
+    border: 3px solid var(--ink);
+    border-bottom: none;
+}
+
+.title {
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    z-index: 30;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 18px;
+    color: #fff;
+    text-shadow: 3px 3px 0 #3f3f3f;
+    letter-spacing: 1px;
+}
+
+.subtitle {
+    position: fixed;
+    top: 50px;
+    left: 20px;
+    z-index: 30;
+    font-size: 22px;
+    color: #ffe94d;
+    text-shadow: 2px 2px 0 #3f3f3f;
+}
+
+.stats {
+    position: fixed;
+    top: 78px;
+    left: 20px;
+    z-index: 30;
+    font-size: 20px;
+    color: #fff;
+    text-shadow: 2px 2px 0 #3f3f3f;
+}
+
+.top-actions {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 30;
+    display: flex;
+    gap: 8px;
+}
+
+.mc-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    color: #fff;
+    text-shadow: 2px 2px 0 #3f3f3f;
+    padding: 12px 14px;
+    cursor: pointer;
+    background: #7d7d7d;
+    border: 4px solid var(--ink);
+    box-shadow: inset 3px 3px 0 #b5b5b5, inset -3px -3px 0 #4f4f4f;
+    white-space: nowrap;
+}
+
+.mc-btn:hover {
+    background: #6f8ad8;
+    box-shadow: inset 3px 3px 0 #a6b8f0, inset -3px -3px 0 #3f55a8;
+}
+
+.mc-btn:active {
+    transform: translateY(2px);
+}
+
+.mc-btn:focus-visible {
+    outline: 3px solid #ffe94d;
+    outline-offset: 2px;
+}
+
+.icon-btn {
+    font-family: system-ui, sans-serif;
+    font-size: 16px;
+    padding: 8px 12px;
 }
 
 .bottom-bar {
@@ -180,7 +406,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     z-index: 20;
 }
 
@@ -215,6 +441,47 @@ body {
 }
 
 .swatch:focus-visible {
+    outline: 3px solid #ffe94d;
+}
+
+.options {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.seg {
+    display: flex;
+    gap: 4px;
+    padding: 3px;
+    background: rgba(255, 255, 255, .9);
+    border: 3px solid #333;
+    border-radius: 8px;
+    box-shadow: 3px 3px 0 #00000030;
+}
+
+.seg-btn {
+    border: none;
+    background: transparent;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 18px;
+    line-height: 1;
+    padding: 5px 9px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.seg-btn:hover {
+    background: #e3edf9;
+}
+
+.seg-btn[aria-pressed="true"] {
+    background: #4a90d9;
+    color: #fff;
+}
+
+.seg-btn:focus-visible {
     outline: 3px solid #ffe94d;
 }
 
@@ -256,7 +523,7 @@ body {
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all .15s ease;
     white-space: nowrap;
 }
 
@@ -269,55 +536,72 @@ body {
     transform: translateY(1px);
 }
 
-.mc-btn {
-    font-family: 'Press Start 2P', monospace;
-    font-size: 11px;
-    color: #fff;
-    text-shadow: 2px 2px 0 #3f3f3f;
-    padding: 0 18px;
-    cursor: pointer;
-    background: #7d7d7d;
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, .55);
+    padding: 16px;
+}
+
+.overlay[hidden] {
+    display: none;
+}
+
+.panel {
+    width: 100%;
+    max-width: 440px;
+    max-height: 100%;
+    overflow: auto;
+    padding: 20px;
+    background: #c6c6c6;
     border: 4px solid var(--ink);
-    box-shadow: inset 3px 3px 0 #b5b5b5, inset -3px -3px 0 #4f4f4f;
-    white-space: nowrap;
-}
-
-.mc-btn:hover {
-    background: #6f8ad8;
-}
-
-.mc-btn:active {
-    transform: translateY(2px);
-}
-
-.title {
-    position: fixed;
-    top: 18px;
-    left: 18px;
-    z-index: 30;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 18px;
-    color: #fff;
-    text-shadow: 3px 3px 0 #3f3f3f, 0 0 0 #000;
-    letter-spacing: 1px;
-}
-
-.subtitle {
-    position: fixed;
-    top: 50px;
-    left: 20px;
-    z-index: 30;
+    box-shadow: inset 4px 4px 0 #fff, inset -4px -4px 0 #555, 6px 6px 0 rgba(0, 0, 0, .4);
     font-size: 22px;
-    color: #ffe94d;
-    text-shadow: 2px 2px 0 #3f3f3f;
+    color: #222;
 }
 
-#clearBtn {
-    position: fixed;
-    top: 16px;
-    right: 16px;
-    z-index: 30;
-    padding: 12px 14px;
+.panel h2 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    margin-bottom: 14px;
+}
+
+.panel .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 7px 0;
+}
+
+.panel .row.buttons {
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+.panel input[type="range"] {
+    width: 150px;
+}
+
+.panel input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+}
+
+.panel .hint {
+    font-size: 18px;
+    color: #444;
+    margin: 12px 0;
+}
+
+.panel #closeSettings {
+    display: block;
+    margin: 0 auto;
 }
 
 @media (max-width: 520px) {
@@ -330,13 +614,14 @@ body {
         top: 40px;
     }
 
+    .stats {
+        font-size: 16px;
+        top: 64px;
+    }
+
     .note {
         font-size: 21px;
         max-width: 190px;
-    }
-
-    #clearBtn {
-        font-size: 9px;
     }
 
     .sun,
@@ -345,11 +630,18 @@ body {
         height: 48px;
         margin: -24px 0 0 -24px;
     }
-}
 
-@media (prefers-reduced-motion: reduce) {
-    .cloud {
-        animation: none;
+    .mc-btn {
+        font-size: 9px;
+        padding: 10px 10px;
     }
 }
 
+@media (prefers-reduced-motion: reduce) {
+
+    .cloud,
+    .ember,
+    .type-torch {
+        animation: none;
+    }
+}
