@@ -645,3 +645,115 @@ body[data-theme="nether"] #embers {
         animation: none;
     }
 }
+
+#types.seg,
+#moods.seg{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 7px;
+    width: fit-content;
+    background: rgba(35, 39, 52, 0.92);
+    border: 2px solid #252832;
+    border-radius: 12px;
+    box-shadow: 3px 4px 0 rgba(0,0,0,.25);
+}
+
+#types.seg,
+#moods.seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 7px;
+    width: fit-content;
+    background: rgba(35, 39, 52, 0.94);
+    border: 2px solid #252832;
+    border-radius: 12px;
+    box-shadow: 3px 4px 0 rgba(0,0,0,.25);
+}
+
+#types .seg-btn,
+#moods .seg-btn {
+    box-sizing: border-box;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background: #454b5b;
+    color: #e5dfd5;
+    border: 2px solid #697184;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+#types .seg-btn svg,
+#moods .seg-btn svg {
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    display: block;
+}
+
+#types .seg-btn:hover,
+#moods .seg-btn:hover {
+    background: #62564f;
+    border-color: #d6ad8b;
+    transform: translateY(-2px);
+}
+
+#types .seg-btn[aria-pressed="true"],
+#moods .seg-btn[aria-pressed="true"] {
+    background: #ffd6a5;
+    color: #49352f;
+    border: 2px solid #fff1dc;
+    box-shadow: 0 0 10px rgba(255, 214, 165, 0.25);
+}
+
+#types .seg-btn[aria-pressed="true"] svg,
+#moods .seg-btn[aria-pressed="true"] svg {
+    stroke: #49352f;
+}
+
+#types .seg-btn:active,
+#moods .seg-btn:active {
+    transform: translateY(1px);
+}
+
+#releaseBtn {
+    background: #c98255;
+    color: #fffaf2;
+    border: 3px solid #49352f;
+    border-radius: 6px;
+    padding: 0 20px;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s ease;
+    white-space: nowrap;
+}
+
+#releaseBtn:hover {
+    background: #b86d45;
+    transform: translateY(-1px);
+}
+
+.mc-btn:hover {
+    background: #80604d;
+    box-shadow:
+        inset 3px 3px 0 #b58c70,
+        inset -3px -3px 0 #50392e;
+}
+
+#types .seg-btn:focus-visible,
+#moods .seg-btn:focus-visible,
+#releaseBtn:focus-visible {
+    outline: 3px solid #ffd6a5;
+    outline-offset: 3px;
+}
